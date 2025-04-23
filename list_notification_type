@@ -1,0 +1,28 @@
+#!/bin/bash
+
+#check if user enters the file
+
+if [ $# -eq 0 ]; then
+echo " You need to enter a file name "
+exit 1
+fi
+
+log_file=$1
+
+#check if the file exists:
+if [ ! -f "$log_file" ]; then
+	echo " file does not exist "
+	exit 2
+fi
+
+
+count_INFO=$( grep -in "INFO" "$log_file" | wc -l )
+count_WARNING=$( cat -A "$log_file" | grep "WARNING" | wc -l)
+count_ERROR=$(grep -in "ERROR" "$log_file" | wc -l )
+count_DEBUG=$(grep -in "DEBUG" "$log_file" | wc -l)
+
+
+echo -e "Type\tCount\nINFO\t$count_INFO\nWARNING\t$count_WARNING\nERROR\t$count_ERROR\nDEBUG\t$count_DEBUG" | column -t
+
+
+
